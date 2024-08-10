@@ -1,0 +1,174 @@
+<html>
+
+<head>
+  <base href="" target="_blank">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Mi Ali</title>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+      background-color: #FFB6C1;
+
+    }
+
+    .parallax {
+      perspective: 1px;
+      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .parallax__layer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .parallax__layer--base {
+      transform: translateZ(0);
+    }
+
+    .parallax__layer--back {
+      transform: translateZ(-1px) scale(2);
+    }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #FF1493;
+
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+    }
+
+    h1 {
+      font-size: 4em;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      font-size: 1.5em;
+      margin-top: 1em;
+    }
+
+    .heart {
+      fill: #FF1493;
+      animation: pulse 1.5s ease infinite;
+      cursor: pointer;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .floating-heart {
+      position: absolute;
+      pointer-events: none;
+      animation: float 3s ease-in infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) scale(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-100vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    .new-text {
+      font-size: 2em;
+      color: #FF69B4;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="parallax">
+    <div class="parallax__layer parallax__layer--back">
+      <!-- Background layer -->
+    </div>
+    <div class="parallax__layer parallax__layer--base">
+      <div class="content">
+        <h1>Te quiero mucho Ali</h1>
+        <svg class="heart" width="100" height="100" viewBox="0 0 100 100">
+          <path d="M50 30 L40 20 A10 10 0 0 0 20 40 L50 70 L80 40 A10 10 0 0 0 60 20 Z" />
+        </svg>
+        <p>Sos la niña de mis ojos</p>
+        <p class="new-text">Te adoro</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const heart = document.querySelector('.heart');
+      const parallax = document.querySelector('.parallax');
+      const newText = document.querySelector('.new-text');
+      let clickCount = 0;
+
+      heart.addEventListener('click', () => {
+        clickCount++;
+        for (let i = 0; i < 50; i++) {
+          setTimeout(() => createHeart(), i * 50);
+        }
+        if (clickCount === 3) {
+          newText.style.opacity = '1';
+        }
+      });
+
+      function createHeart() {
+        const heart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        heart.setAttribute("class", "floating-heart");
+        heart.setAttribute("width", "30");
+        heart.setAttribute("height", "30");
+        heart.setAttribute("viewBox", "0 0 100 100");
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = window.innerHeight + 'px';
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", "M50 30 L40 20 A10 10 0 0 0 20 40 L50 70 L80 40 A10 10 0 0 0 60 20 Z");
+        path.setAttribute("fill", "#FF1493");
+
+        heart.appendChild(path);
+        parallax.appendChild(heart);
+
+        setTimeout(() => {
+          parallax.removeChild(heart);
+        }, 3000);
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallaxBack = document.querySelector(".parallax__layer--back");
+      parallaxBack.style.transform = `translateY(${scrolled * 0.5}px) translateZ(-1px) scale(2)`;
+    });
+  </script>
+</body>
+
+</html>
